@@ -104,7 +104,7 @@ const tasks = [
     },
   };
 
-  let lastSelectedTheme = 'default';
+  let lastSelectedTheme = localStorage.getItem('app_theme') || 'default';
   console.log(objOfTasks)
 
 // Elements UI получаем элементы со страницы
@@ -117,6 +117,7 @@ const themeSelect = document.getElementById('themeSelect')
 
 
 // Events
+setTheme(lastSelectedTheme)
   renderAllTasks(objOfTasks); // передаем обект тасок в функцию которая отрендерит таски на странице
 
   form.addEventListener('submit', onFormSubmitHandler); // сабмит формы, добавление таски
@@ -249,6 +250,7 @@ function onThemeSelectHandler(e) {
   }
   setTheme(selectedTheme);
   lastSelectedTheme = selectedTheme;
+  localStorage.setItem('app_theme', selectedTheme);
 }
 
 
