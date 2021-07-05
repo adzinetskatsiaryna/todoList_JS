@@ -71,3 +71,13 @@ body {
   border-color: var(--input-focus-border-color);
   box-shadow: var(--input-focus-box-shadow);
 }
+.completedButton{
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+};
+
+
+.list-group-item .completedTask{ 
+  background-color: darkcyan;
+}

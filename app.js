@@ -117,22 +117,27 @@ const themeSelect = document.getElementById('themeSelect')
 
 
 // Events
-setTheme(lastSelectedTheme)
-  renderAllTasks(objOfTasks); // передаем обект тасок в функцию которая отрендерит таски на странице
+  setTheme(lastSelectedTheme);
 
+  renderAllTasks(objOfTasks); // передаем обект тасок в функцию которая отрендерит таски на странице
+  
   form.addEventListener('submit', onFormSubmitHandler); // сабмит формы, добавление таски
 
   listContainer.addEventListener('click', onDeleteHandler); // удаление таски
-  themeSelect.addEventListener('change', onThemeSelectHandler)
+  themeSelect.addEventListener('change', onThemeSelectHandler);
+  listContainer.addEventListener('change', onComplitedTaskHandler);
 
 // Function
 
 // при помощи метода Object.values вернем массив значений, пройдем по нему, создадим li, поместим li d fragment, а fragment в контейнер на страницу
-  function renderAllTasks(taskList){
+
+
+
+function renderAllTasks(taskList){
     if(!taskList){
       console.error('Передайте список задач')
       return
-    }
+    };
 
     const fragment = document.createDocumentFragment();
     Object.values(taskList).forEach(task=>{
@@ -163,12 +168,17 @@ setTheme(lastSelectedTheme)
     deleteBtn.textContent = 'Delete task';
     deleteBtn.classList.add('btn', 'btn-danger', 'ml-auto', 'delete-btn');
 
+    const completedButton = document.createElement('input');
+    completedButton.type = 'checkbox'
+    completedButton.classList.add('completedButton', 'completedTask');
+  
     const article = document.createElement('p');
     article.textContent = body;
     article.classList.add('mt-2', 'w-100')
 
     li.appendChild(span);
     li.appendChild(deleteBtn);
+    li.appendChild(completedButton);
     li.appendChild(article)
     //console.log(li)
     return li
@@ -212,7 +222,7 @@ setTheme(lastSelectedTheme)
   // удаление таски по id в объекте тасок
   function deleteTask (id){
     const {title} = objOfTasks[id];
-    const  isConfirm = confirm(`Точно хотите удалить задачуЖ ${title}?`);
+    const  isConfirm = confirm(`Точно хотите удалить задачу ${title}?`);
     if(!isConfirm) return isConfirm;
     delete objOfTasks[id]
     return isConfirm
@@ -238,6 +248,23 @@ function onDeleteHandler ({target}){
 };
 
 
+ function onComplitedTaskHandler ({target}){
+  if(target.classList.contains('completedTask')){
+    const parent = target.closest('[data-task-id]');
+    const id = parent.dataset.taskId;
+    const newCompleted = target.checked;
+    completedTask(id, parent, newCompleted)
+  }
+ };
+
+function completedTask(id, el, status){
+  objOfTasks[id].completed = status;
+ // console.log(status)
+  status ? el.classList.add('completedTask') : el.classList.remove('completedTask');
+};
+
+
+
 // обработчик события изменения селекта
 function onThemeSelectHandler(e) {
   const selectedTheme = themeSelect.value;
@@ -261,5 +288,6 @@ function setTheme(name) {
     document.documentElement.style.setProperty(key, value);
   });
 }
+
 
 })(tasks);
